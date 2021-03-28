@@ -29,7 +29,7 @@ class PostsModelTest(TestCase):
 
     def test_post_title(self):
         post = PostsModelTest.uverif
-        expected = "супер пост"
+        expected = "супер [...]"
         self.assertEquals(expected, str(post))
 
 

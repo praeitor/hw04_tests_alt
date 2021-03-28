@@ -1,3 +1,5 @@
+from textwrap import shorten
+
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -27,10 +29,17 @@ class Post(models.Model):
     )
 
     def __str__(self):
-        return self.text[:15]
+        text = shorten(
+            f"{self.text}, "
+            f"написал {self.author} "
+            f"из группы {self.group}, "
+            f"дата {self.pub_date}", 
+            15,
+        )
+        return text
 
     class Meta:
-        ordering = ["-pub_date"]
+        ordering = ("-pub_date",)
         verbose_name = "Текст сообщения"
 
 

@@ -34,6 +34,8 @@ class PostsURLTests(TestCase):
         self.authorized_client.force_login(self.user)
 
     def test_urls(self):
+        """Проверка доступности основных url сайта"""
+
         site_urls = {
             "/": 200,
             "/group/tgrp/": 200,
@@ -51,15 +53,17 @@ class PostsURLTests(TestCase):
                     status_code
                 )
 
-    def test_urls_uses_correct_template_auth_new(self):
-        """Страница new использует корректный темплейт, с авторизацией."""
-        response = self.authorized_client.get("/new/")
-        self.assertTemplateUsed(response, "newpost.html")
-
-    def test_urls_uses_correct_template_auth_edit(self):
-        """Страница edit использует корректный темплейт, с авторизацией."""
-        response = self.authorized_client.get("/user_test/1/edit/")
-        self.assertTemplateUsed(response, "newpost.html")
+    def test_urls_uses_correct_template_auth(self):
+        """Страницы использует корректный темплейт, с авторизацией."""
+        template = "newpost.html"
+        templates_url_names = {
+            "/new/",
+            "/user_test/1/edit/",
+        }
+        for url_path in templates_url_names:
+            with self.subTest():
+                response = self.authorized_client.get(url_path)
+                self.assertTemplateUsed(response, template)
 
     def test_urls_uses_correct_template_anon(self):
         """Страницы использует корректный темплейт, без авторизации."""
@@ -73,14 +77,14 @@ class PostsURLTests(TestCase):
                 self.assertTemplateUsed(response, template)
 
     def test_url_redirect_anonymous_edit_to_login(self):
-        """Корректный редирект анонимного пользоватлея со страницы edit."""
+        """Корректный редирект анонима со страницы edit."""
         response = self.guest_client.get(
             "/user_test/1/edit/", follow=True)
         self.assertRedirects(
             response, "/auth/login/?next=/user_test/1/edit/")
 
-    def test_url_redirect_notauthor_edit_to_postview(self):
-        """Корректный редирект не автора со страницы edit."""
+    def test_url_redirect_anonymous_edit_to_postview(self):
+        """Корректный аторизованного (не автора) со страницы edit."""
         response = self.authorized_client.get(
             "/second_user/2/edit/", follow=True)
         self.assertRedirects(

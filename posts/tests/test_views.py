@@ -1,7 +1,7 @@
+from django import forms
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
-from django import forms
 
 from posts.models import Post, Group
 
@@ -13,15 +13,16 @@ class PostsViewsTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         tuser = User.objects.create(username="user_test")
-        cls.post = Post.objects.create(
-            text="супер пост",
-            pub_date="2021-03-22",
-            author=tuser,
-        )
         cls.group = Group.objects.create(
             title="testgroup",
             slug="tgrp",
             description="testovaya gruppa",
+        )
+        cls.post = Post.objects.create(
+            text="супер пост",
+            pub_date="2021-03-22",
+            author=tuser,
+            group=cls.group,
         )
 
     def setUp(self):
