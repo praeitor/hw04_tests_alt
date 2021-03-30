@@ -29,14 +29,11 @@ class Post(models.Model):
     )
 
     def __str__(self):
-        text = shorten(
-            f"{self.text}, "
-            f"написал {self.author} "
-            f"из группы {self.group}, "
-            f"дата {self.pub_date}", 
-            15,
+        text = (
+            f'{self.text}, написал {self.author} из группы {self.group}, '
+            f'дата {self.pub_date}'
         )
-        return text
+        return shorten(text, 15)
 
     class Meta:
         ordering = ("-pub_date",)
